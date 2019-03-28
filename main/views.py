@@ -45,7 +45,7 @@ def main(request):
     return render(request, template,
                   {'tab_output': tab_output})
 
-def process_tab():
+def process_tab(tab):
     """
     Function to process our tab. Not sure how we'll be doing this, so leaving
     empty for now
@@ -56,6 +56,12 @@ def process_tab():
 
     :return:
     """
+
+    # this shouldn't be too difficult, each line of the tab begins with the corresponding note of the string
+    # e.g. 'a', 'b', etc. and then '|', and terminates with '\n'. SO, all we have to do, is join each string-line:
+    # .join('b|','\nb|'), etc. etc.
+
+
 
 def get_tab(url):
     """
