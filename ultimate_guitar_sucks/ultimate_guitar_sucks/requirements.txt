@@ -1,3 +1,7 @@
 BeautifulSoup
 Pandas
 Numpy
+Django
+urllib3
+django-bootstrap4
+django-crispy-forms
