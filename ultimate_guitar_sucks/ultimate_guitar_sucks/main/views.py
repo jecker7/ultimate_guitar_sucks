@@ -2,7 +2,8 @@ import csv
 import json
 import os
 import datetime
-import requests as re
+import requests
+import re
 from bs4 import BeautifulSoup as bs
 
 
@@ -13,24 +14,60 @@ from django.utils.encoding import smart_str
 from django.contrib.auth.decorators import login_required
 
 
-from .forms import TabForm
-
-
-
+from .forms import URLForm
 
 def main(request):
+    """
+    Main method to handle views for our single page.
+    Passes a URLForm to the page, the user enters in a URL,
+    we handle the URL to process the tab, then pass the tab as
+    an object to our home.html template
+    :param request:
+    :return:
+    """
     template = 'main/home.html'
 
-    if not requestmethod == 'POST':
+    if not request.method == 'POST':
         return render(request, template, {'url_form': URLForm()})
 
     url_form = URLForm(request.POST)
 
+    if not url_form.is_valid():
+        print('form problem')
+        print(url_form.errors)
+        return render(request, template, {'url_form': url_form})
+
+    url = url_form.cleaned_data['url']
+
+    tab = get_tab(url)
+
+    tab_output = None
     return render(request, template,
                   {'tab_output': tab_output})
 
+def process_tab():
+    """
+    Function to process our tab. Not sure how we'll be doing this, so leaving
+    empty for now
+
+    One simple start can be to just join the entire tab on /n characters, so we have a
+    continuous unbroken represenation of our tab in ASCII. This can then be turned into a
+    simple JSON object, or just passed as a string to be handled on the front-end (somehow).
+
+    :return:
+    """
+
 def get_tab(url):
+    """
+    Function to get our tab from the url specified. Uses one pattern now, must be tested
+    across more tabs and patterns to ensure that we grab the right tab for our link
+    :param url:
+    :return:
+    """
+    # making our soup with page content
+    page = bs(re.get(url).content)
 
-    page = re.get(url).content
-
-
+    # this pattern should work for at least some UG pages:
+    pattern = 'content":"([^"0*)'
+    m = re.search(pattern, page.prettify())
+    tab = m.group(0)
