@@ -1,7 +1,8 @@
-BeautifulSoup
+BeautifulSoup4
 Pandas
 Numpy
 Django
 urllib3
 django-bootstrap4
 django-crispy-forms
+requests
