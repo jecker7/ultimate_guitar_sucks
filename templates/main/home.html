@@ -1,7 +1,9 @@
 {% extends 'main/base.html' %} {% load bootstrap4 %}
  {% block content %}
-
 <div class="text-center mt-4 form-container">
+ <h1> Ultimate-Guitar Sucks!</h1>
+ <br>
+ <h3> We can help </h3>
   <form action="/url/to/submit/" method="post" class="form">
     {% csrf_token %} {% bootstrap_form url_form %} {% buttons %}
     <button type="submit" class="btn btn-primary">Submit</button>

@@ -14,7 +14,7 @@ from django.utils.encoding import smart_str
 from django.contrib.auth.decorators import login_required
 
 
-from .forms import URLForm
+from forms import URLForm
 
 def main(request):
     """
@@ -71,9 +71,10 @@ def get_tab(url):
     :return:
     """
     # making our soup with page content
-    page = bs(re.get(url).content)
+    page = bs(requests.get(url).content, features='lxml')
 
     # this pattern should work for at least some UG pages:
-    pattern = 'content":"([^"0*)'
+    pattern = 'content":"[^"]*'
     m = re.search(pattern, page.prettify())
     tab = m.group(0)
+    return tab
