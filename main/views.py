@@ -56,10 +56,19 @@ def process_tab(tab):
 
     :return:
     """
+    # most of the tabs on UG are split with //n
+    lines = tab.split('//n')
+    cleaned_lines = []
 
-    # this shouldn't be too difficult, each line of the tab begins with the corresponding note of the string
-    # e.g. 'a', 'b', etc. and then '|', and terminates with '\n'. SO, all we have to do, is join each string-line:
-    # .join('b|','\nb|'), etc. etc.
+    # removing lines without tabs - this will break if there is a note on each
+    # line
+    for line in lines:
+        if '-' in line:
+            cleaned_lines.append(line)
+    # sorting out our tab into separate lists for each line /string
+    strings = []
+    for i in range(6):
+        strings.append(cleaned_lines[i::6]
 
 
 
