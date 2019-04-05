@@ -13,7 +13,7 @@ from django.conf import settings as django_settings
 from django.utils.encoding import smart_str
 from django.contrib.auth.decorators import login_required
 
-
+from ascii_tab_to_svg import TabScraper
 from .forms import URLForm
 
 def main(request):
@@ -38,55 +38,11 @@ def main(request):
         return render(request, template, {'url_form': url_form})
 
     url = url_form.cleaned_data['url']
-
-    tab = get_tab(url)
-
+    # will finish refactoring this later once logic is done
+    scraper = TabScraper(tab)
     tab_output = None
     return render(request, template,
                   {'tab_output': tab_output})
-
-def process_tab(tab):
-    """
-    Function to process our tab. Not sure how we'll be doing this, so leaving
-    empty for now
-
-    One simple start can be to just join the entire tab on /n characters, so we have a
-    continuous unbroken represenation of our tab in ASCII. This can then be turned into a
-    simple JSON object, or just passed as a string to be handled on the front-end (somehow).
-
-    :return:
-    """
-    # most of the tabs on UG are split with //n
-    lines = tab.split('//n')
-    cleaned_lines = []
-
-    # removing lines without tabs - this will break if there is a note on each
-    # line
-    for line in lines:
-        if '-' in line:
-            cleaned_lines.append(line)
-    # sorting out our tab into separate lists for each line /string
-    strings = []
-    for i in range(6):
-        strings.append(cleaned_lines[i::6])
-    return strings
-
-
-def get_tab(url):
-    """
-    Function to get our tab from the url specified. Uses one pattern now, must be tested
-    across more tabs and patterns to ensure that we grab the right tab for our link
-    :param url:
-    :return:
-    """
-    # making our soup with page content
-    page = bs(requests.get(url).content, features='lxml')
-
-    # this pattern should work for at least some UG pages:
-    pattern = 'content":"[^"]*'
-    m = re.search(pattern, page.prettify())
-    tab = m.group(0)
-    return tab
 
 def display_tab(tab):
     """
