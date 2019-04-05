@@ -14,7 +14,7 @@ from django.utils.encoding import smart_str
 from django.contrib.auth.decorators import login_required
 
 
-from forms import URLForm
+from .forms import URLForm
 
 def main(request):
     """
@@ -68,8 +68,8 @@ def process_tab(tab):
     # sorting out our tab into separate lists for each line /string
     strings = []
     for i in range(6):
-        strings.append(cleaned_lines[i::6]
-
+        strings.append(cleaned_lines[i::6])
+    return strings
 
 
 def get_tab(url):
@@ -87,3 +87,17 @@ def get_tab(url):
     m = re.search(pattern, page.prettify())
     tab = m.group(0)
     return tab
+
+def display_tab(tab):
+    """
+    Display our tab in the browser as SVG using VexTab (for now)
+    :param tab:
+    :return: template
+    """
+
+    template = 'main/home.html'
+
+    return render(request, template,
+                  {'tab_output': tab_output})
+
+

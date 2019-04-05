@@ -8,4 +8,5 @@ from . import views as views
 
 urlpatterns = [
     path('', views.main, name='main')
+    path('display_tab', views.display_tab, name='display')
 ]

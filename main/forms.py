@@ -3,7 +3,7 @@ from django import forms
 
 class URLForm(forms.Form):
 
-    url = forms.CharField(
+    url = forms.URLField(
         max_length=250,
         label = "Paste your tab's URL below",
         # initial='https://tabs.ultimate-guitar.com/tab/rick_astley/never_gonna_give_you_up_tabs_1970139',

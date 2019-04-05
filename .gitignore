@@ -106,3 +106,6 @@ venv.bak/
 
 # ipynb
 *.ipynb
+
+# vim swap files
+*.swp
