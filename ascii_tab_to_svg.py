@@ -92,7 +92,7 @@ class SVGTab:
 
     def tab_poly_points(start, height, width, line_spacing):
         """ generates polyline points for building a simple 6-line staff
-            todo: do this iterative for n number of lines
+            todo: do this iteratively for n number of lines
         """
         points = []
         points.append((start[0], start[1]))
