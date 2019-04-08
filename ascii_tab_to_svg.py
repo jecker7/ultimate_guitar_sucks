@@ -78,43 +78,32 @@ BASIC ALGORITHM:
 # should we make this subclass of svgwrite drawing?
 class SVGTab:
     # some other considerations - name, artist, date?
-    def __init__(height, width, font_size, css, ascii_tab):
-       self.width = width
-       self.height = height
-       self.size = (height, width)
-       self.font_size = font_size
-       self.css = css
-       self.ascii_tab = ascii_tab
-       self.svg_tab = svgwrite.drawing('tab.svg', self.size)
-       # note on svgwrtie.drawing size: USER-UNIT is
-       # absolute_dimension/relative_dimension
-       self.svg_tab.viewbox = self.dimensions
+    def __init__(self, dimensions=(1000,1000)):
+        self.dimensions = dimensions
 
-    def tab_poly_points(start, height, width, line_spacing):
+    def tab_poly_points(self, start, height, width, num_strings):
         """ generates polyline points for building a simple 6-line staff
-            todo: do this iteratively for n number of lines
         """
-        points = []
-        points.append((start[0], start[1]))
-        points.append((start[0]+width, start[1]))
-        points.append((start[0]+width, start[1]+line_spacing))
-        points.append((start[0], start[1]+line_spacing))
-        points.append((start[0], start[1]+ line_spacing*2))
-        points.append((start[0]+width, start[1]+line_spacing*2))
-        points.append((start[0]+width, start[1]+line_spacing*3))
-        points.append((start[0], start[1]+ line_spacing*3))
-        points.append((start[0], start[1]+ line_spacing*4))
-        points.append((start[0]+width, start[1]+line_spacing*4))
-        points.append((start[0]+width, start[1]+line_spacing*5))
-        points.append((start[0], start[1]+ line_spacing*5))
-        points.append((start[0]+width, start[1]+line_spacing*5))
-        points.append((start[0], start[1]))
-        points.append((start[0]+width, start[1]))
-        points.append((start[0]+width, start[1]+line_spacing*5))
+        line_spacing = height/(num_strings-1)
+        # adding three corners of a rectangle used to outline our staff
+        # when drawn with the initial starting point to fill lines
+        # note that this causes one single "doubly drawn" line
+        points = [(start[0], start[1]),(start[0]+width, start[1]),
+                  (start[0]+width, start[1]+((num_strings-1)*line_spacing)),
+                  (start[0], start[1]+((num_strings-1)*line_spacing))]
+        i = 0
+        # drawing the horizontal lines of our staff
+        while i < num_strings-1:
+            points.append((start[0], start[1] + line_spacing*i))
+            points.append((start[0]+width, start[1] + line_spacing*i))
+            points.append((start[0]+width, start[1]+line_spacing*(i+1)))
+            points.append((start[0], start[1]+line_spacing*(i+1)))
+            i += 2
         return points
 
-    def fill_staff(svg_drawing, ascii_tab, start_x, start_y, line_spacing, drawing, font_size
-                   staff_width, staff_spacing):
+
+    def fill_staff(svg_drawing, ascii_tab, start_x, start_y, line_spacing,
+                   drawing, font_size, staff_width, staff_spacing):
         """ fills an svg tab with the notes from an ascii tab """
         cur_x = start_x
         cur_y = start_y
@@ -124,7 +113,7 @@ class SVGTab:
             for line in ascii_tab:
                 for char in line:
                     if char.isdigit():
-                    svg_drawing.add(svg_drawing.text(char, x=cur_x, y=cur_y))
+                        svg_drawing.add(svg_drawing.text(char, x=cur_x, y=cur_y))
                     cur_x += 1
                 cur_y += line_spacing
                 cur_x = start_x
